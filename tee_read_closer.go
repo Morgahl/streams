@@ -12,12 +12,14 @@ type TeeReadCloser struct {
 }
 
 // NewTeeReadCloser returns a new TeeReadCloser
-func NewTeeReadCloser(r io.ReadCloser, w io.WriteCloser) (io.ReadCloser, error) {
+func NewTeeReadCloser(r io.Reader, w io.WriteCloser) (io.ReadCloser, error) {
 	return &TeeReadCloser{
 		tee: io.TeeReader(r, w),
 		close: func() error {
-			if err := r.Close(); err != nil {
-				return err
+			if rc, ok := r.(io.ReadCloser); ok {
+				if err := rc.Close(); err != nil {
+					return err
+				}
 			}
 			return w.Close()
 		},
