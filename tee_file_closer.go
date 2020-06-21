@@ -6,6 +6,11 @@ import (
 	"github.com/curlymon/bufioc/file"
 )
 
+var (
+	// compile time checking of io.ReadCloser compliance
+	_ io.ReadCloser = new(TeeFileCloser)
+)
+
 // TeeFileCloser wraps an io.TeeReader and automatically handles the close of the
 // underlying reader and writer if they happen to be an io.Closer
 type TeeFileCloser struct {
