@@ -4,34 +4,25 @@ import (
 	"io"
 )
 
-// TeeReadCloser wraps an io.TeeReader and handles automatically close of the
-// underlying reader and writer when io.EOF is returned from the source reader
+// TeeReadCloser wraps an io.TeeReader and automatically handles the close of the
+// underlying reader and writer if they happen to be an io.Closer
 type TeeReadCloser struct {
-	tee   io.Reader
+	io.Reader
 	close func() error
 }
 
 // NewTeeReadCloser returns a new TeeReadCloser
-func NewTeeReadCloser(r io.Reader, w io.WriteCloser) (io.ReadCloser, error) {
+func NewTeeReadCloser(r io.Reader, w io.Writer) io.ReadCloser {
 	return &TeeReadCloser{
-		tee: io.TeeReader(r, w),
+		Reader: io.TeeReader(r, w),
 		close: func() error {
-			if rc, ok := r.(io.ReadCloser); ok {
-				if err := rc.Close(); err != nil {
-					return err
-				}
+			if err := closeIfCloser(r); err != nil {
+				return err
 			}
-			return w.Close()
-		},
-	}, nil
-}
 
-// Read implements io.Reader interface
-func (trc *TeeReadCloser) Read(p []byte) (n int, err error) {
-	if n, err = trc.tee.Read(p); err == io.EOF {
-		err = trc.close()
+			return closeIfCloser(w)
+		},
 	}
-	return
 }
 
 // Close implements io.Closer interface
