@@ -3,7 +3,7 @@ package streams
 import "io"
 
 var (
-	// compile time checking of io.WriteCloser compliance
+	// compile time checking of io.Writer compliance
 	_ io.Writer = new(WriterMapper)
 )
 

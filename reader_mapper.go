@@ -3,7 +3,7 @@ package streams
 import "io"
 
 var (
-	// compile time checking of io.ReadCloser compliance
+	// compile time checking of io.Reader compliance
 	_ io.Reader = new(ReaderMapper)
 )
 
