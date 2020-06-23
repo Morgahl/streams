@@ -15,7 +15,7 @@ var (
 // automatically when io.EOF is recieved
 type TeeReaderToFile struct {
 	r      io.Reader
-	fClose closeFunc
+	fClose CloseFunc
 }
 
 // NewTeeReaderToFile returns a new TeeReaderToFile

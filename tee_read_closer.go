@@ -13,7 +13,7 @@ var (
 // underlying reader and writer if they happen to be an io.Closer
 type TeeReadCloser struct {
 	io.Reader
-	close func() error
+	close CloseFunc
 }
 
 // NewTeeReadCloser returns a new TeeReadCloser
