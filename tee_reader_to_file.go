@@ -8,32 +8,32 @@ import (
 
 var (
 	// compile time checking of io.Reader compliance
-	_ io.Reader = new(TeeFileReader)
+	_ io.Reader = new(TeeReaderToFile)
 )
 
-// TeeFileReader wraps an io.TeeReader and automatically handles the close of the
-// underlying reader and writer if they happen to be an io.Closer
-type TeeFileReader struct {
+// TeeReaderToFile wraps an io.TeeReader, it will close the underlying file
+// automatically when io.EOF is recieved
+type TeeReaderToFile struct {
 	r      io.Reader
 	fClose closeFunc
 }
 
-// NewTeeFileReader returns a new TeeFileReader
-func NewTeeFileReader(r io.Reader, path string) (io.Reader, error) {
+// NewTeeReaderToFile returns a new TeeReaderToFile
+func NewTeeReaderToFile(r io.Reader, path string) (io.Reader, error) {
 	f, err := file.NewWriterCreate(path)
 	if err != nil {
 		return nil, err
 	}
 
-	return &TeeFileReader{
+	return &TeeReaderToFile{
 		r:      io.TeeReader(r, f),
 		fClose: f.Close,
 	}, nil
 }
 
 // Read implements the io.Reader interface, it will close the underlying file
-// automatically if io.EOF is recieved
-func (tfc *TeeFileReader) Read(p []byte) (n int, err error) {
+// automatically when io.EOF is recieved
+func (tfc *TeeReaderToFile) Read(p []byte) (n int, err error) {
 	if n, err = tfc.r.Read(p); err == io.EOF {
 		if cErr := tfc.fClose(); cErr != nil {
 			return n, cErr
