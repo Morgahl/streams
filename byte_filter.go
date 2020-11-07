@@ -41,11 +41,11 @@ func (bf *ByteFilter) InterceptRead(r io.Reader, p []byte) (n int, err error) {
 	return len(newP), err
 }
 
-// CompiledByteFilterInterceptor prebuilds an array based on the output of the passed
+// CompiledByteFilter prebuilds an array based on the output of the passed
 // ByteFilterFunc, using this array as a fast lookup to filter all intercepted bytes. However as
 // this assumes that the passed ByteFilterFunc is idempotent or stateless in nature, it has
 // undefined behvaior if this is not the case.
-func CompiledByteFilterInterceptor(bytefilterFunc ByteFilterFunc) Interceptor {
+func CompiledByteFilter(bytefilterFunc ByteFilterFunc) Interceptor {
 	return NewByteFilter(CompileByteFilterFunc(bytefilterFunc))
 }
 
