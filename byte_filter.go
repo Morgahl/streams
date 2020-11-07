@@ -46,7 +46,7 @@ func (bf *ByteFilter) InterceptRead(r io.Reader, p []byte) (n int, err error) {
 // this assumes that the passed ByteFilterFunc is idempotent or stateless in nature, it has
 // undefined behvaior if this is not the case.
 func CompiledByteFilterInterceptor(bytefilterFunc ByteFilterFunc) Interceptor {
-	return ByteFilterInterceptor(CompileByteFilterFunc(bytefilterFunc))
+	return NewByteFilter(CompileByteFilterFunc(bytefilterFunc))
 }
 
 // ByteFilterFunc is used to filter bytes returning true if the byte should be retained. This can be
