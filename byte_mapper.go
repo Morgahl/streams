@@ -4,7 +4,7 @@ import "io"
 
 // ByteMapper remaps all intercepted bytes based on the passed ByteMapperFunc. It should be safe
 // to use either a statefull or idempotent function in this. However you should avoid reuse of a
-// stateful ByteMapperFunc as correct behvior is difficult and error prone to implement.
+// stateful ByteMapperFunc as correct behavior is difficult and error prone to implement.
 type ByteMapper struct {
 	bmfn ByteMapperFunc
 }
