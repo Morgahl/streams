@@ -32,10 +32,7 @@ func (bc *BytesCounter) Count() uint64 {
 	return bc.bytes
 }
 
-// // ByteMapperInterceptor remaps all intercepted bytes based on the passed ByteMapperFunc. It should
-// // be safe to use either a statefull or idempotent function in this. However you should avoid reuse
-// // of a stateful ByteMapperFunc as correct behvior is difficult and error prone to implement.
-// func ByteMapperInterceptor(byteMapperFunc ByteMapperFunc) InterceptorFunc {
+// func ByteMapperInterceptor(byteMapperFunc ByteMapperFunc) Interceptor {
 // 	return func(rwFunc ReaderWriterFunc, isReader bool, p []byte) (n int, err error) {
 // 		if !isReader {
 // 			for i, byt := range p {
@@ -54,14 +51,6 @@ func (bc *BytesCounter) Count() uint64 {
 
 // 		return // n, err
 // 	}
-// }
-
-// // CompiledByteMapperInterceptor prebuilds an array based on the output of the passed
-// // ByteMapperFunc, using this array as a fast lookup to remap all intercepted bytes. However as this
-// // assumes that the passed ByteMapperFunc is idempotent or stateless in nature, it has undefined
-// // behvaior if this is not the case.
-// func CompiledByteMapperInterceptor(byteMapperFunc ByteMapperFunc) InterceptorFunc {
-// 	return ByteMapperInterceptor(CompileByteMapperFunc(byteMapperFunc))
 // }
 
 // // ByteFilterInterceptor filters all intercepted bytes based on the passed ByteFilterFunc. It should
